@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A2 English 100 Verbs & Collocations Master</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        bgWarm: '#FAF7F2',
+                        cream: '#EFECE6',
+                        creamDark: '#E3DDD3',
+                        sage: '#6E7F6F',
+                        sageLight: '#E8EBE8',
+                        clay: '#D36B4C',
+                        clayLight: '#F8ECE8',
+                        charcoal: '#2B2927',
+                        muted: '#7A7672'
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'flat': '0 4px 12px rgba(43, 41, 39, 0.05)',
+                        'flat-lg': '0 10px 25px rgba(43, 41, 39, 0.08)',
+                        'inner-soft': 'inset 0 2px 4px rgba(0,0,0,0.03)'
+                    },
+                    keyframes: {
+                        shake: {
+                            '0%, 100%': { transform: 'translateX(0)' },
+                            '20%, 60%': { transform: 'translateX(-8px)' },
+                            '40%, 80%': { transform: 'translateX(8px)' },
+                        },
+                        pop: {
+                            '0%': { transform: 'scale(0.95)' },
+                            '50%': { transform: 'scale(1.03)' },
+                            '100%': { transform: 'scale(1)' }
+                        }
+                    },
+                    animation: {
+                        shake: 'shake 0.4s ease-in-out',
+                        pop: 'pop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #FAF7F2;
+            color: #2B2927;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .perspective-1000 { perspective: 1000px; }
+        .transform-style-3d { transform-style: preserve-3d; }
+        .backface-hidden { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+        .rotate-y-180 { transform: rotateY(180deg); }
+
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #EFECE6; border-radius: 999px; }
+        ::-webkit-scrollbar-thumb { background: #6E7F6F; border-radius: 999px; }
+
+        #fxCanvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            pointer-events: none;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body class="h-full flex flex-col justify-between max-w-4xl mx-auto px-4 py-4 sm:px-6 sm:py-6">
+
+    <canvas id="fxCanvas"></canvas>
+
+    <!-- App Header & Navigation Bar -->
+    <header class="mb-5">
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-3 mb-3">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-2xl bg-clay text-white flex items-center justify-center font-bold text-xl shadow-flat">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                </div>
+                <div>
+                    <h1 class="font-extrabold text-xl text-charcoal tracking-tight flex items-center gap-2">
+                        Verb Master 
+                        <span class="text-xs px-2.5 py-0.5 rounded-full bg-sage/20 text-sage font-bold">100 Cambridge A2 Verbs</span>
+                    </h1>
+                    <p class="text-xs text-muted">Collocations, Prepositions & Sentence Structure</p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-3">
+                <button id="soundToggleBtn" onclick="toggleAudio()" class="px-3 py-1.5 rounded-xl bg-cream hover:bg-creamDark text-charcoal text-xs font-medium transition flex items-center gap-2">
+                    <i id="soundIcon" class="fa-solid fa-volume-high text-sage"></i>
+                    <span id="soundLabel">Sound On</span>
+                </button>
+                <div class="px-3 py-1.5 rounded-xl bg-sage/10 text-sage border border-sage/20 text-xs font-bold flex items-center gap-1.5">
+                    <i class="fa-solid fa-star text-amber-500"></i>
+                    <span id="totalStars">0</span> / 100 Mastered
+                </div>
+            </div>
+        </div>
+
+        <!-- Global Filter & Set Size Control Bar -->
+        <div class="bg-white p-2.5 rounded-2xl border border-cream shadow-flat mb-3 flex flex-wrap items-center justify-between gap-2 text-xs">
+            <div class="flex items-center gap-2 overflow-x-auto w-full sm:w-auto pb-1 sm:pb-0">
+                <span class="font-bold text-muted flex items-center gap-1"><i class="fa-solid fa-filter text-sage"></i> Category:</span>
+                <select id="categorySelect" onchange="applyFilters()" class="bg-cream/60 border border-cream font-bold text-charcoal py-1.5 px-3 rounded-xl focus:outline-none focus:border-sage">
+                    <option value="All">All Categories (100 Verbs)</option>
+                    <option value="Routines">Daily Routines & Home</option>
+                    <option value="Travel">Travel & Transport</option>
+                    <option value="Food">Food & Drinks</option>
+                    <option value="Social">Social & Communication</option>
+                    <option value="Leisure">Leisure & Hobbies</option>
+                    <option value="Work">Work & Study</option>
+                </select>
+            </div>
+
+            <div class="flex items-center gap-2">
+                <span class="font-bold text-muted"><i class="fa-solid fa-layer-group text-clay"></i> Practice Set:</span>
+                <select id="setSizeSelect" onchange="applyFilters()" class="bg-cream/60 border border-cream font-bold text-charcoal py-1.5 px-3 rounded-xl focus:outline-none focus:border-sage">
+                    <option value="10">First 10 Verbs</option>
+                    <option value="20">First 20 Verbs</option>
+                    <option value="50">First 50 Verbs</option>
+                    <option value="100" selected>All 100 Verbs</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Mode Selector Bar (iOS Pill Design) -->
+        <nav class="bg-cream p-1.5 rounded-2xl flex items-center justify-between gap-1 shadow-inner-soft overflow-x-auto">
+            <button onclick="switchMode('view')" id="nav-view" class="mode-btn flex-1 min-w-[70px] py-2 px-3 rounded-xl text-xs font-bold transition-all text-center flex flex-col sm:flex-row items-center justify-center gap-1.5 bg-white text-charcoal shadow-flat">
+                <i class="fa-solid fa-book-open"></i> View & List
+            </button>
+            <button onclick="switchMode('match')" id="nav-match" class="mode-btn flex-1 min-w-[70px] py-2 px-3 rounded-xl text-xs font-bold transition-all text-center flex flex-col sm:flex-row items-center justify-center gap-1.5 text-muted hover:text-charcoal">
+                <i class="fa-solid fa-puzzle-piece"></i> Match
+            </button>
+            <button onclick="switchMode('gapfill')" id="nav-gapfill" class="mode-btn flex-1 min-w-[70px] py-2 px-3 rounded-xl text-xs font-bold transition-all text-center flex flex-col sm:flex-row items-center justify-center gap-1.5 text-muted hover:text-charcoal">
+                <i class="fa-solid fa-stopwatch"></i> Gapfill
+            </button>
+            <button onclick="switchMode('write')" id="nav-write" class="mode-btn flex-1 min-w-[70px] py-2 px-3 rounded-xl text-xs font-bold transition-all text-center flex flex-col sm:flex-row items-center justify-center gap-1.5 text-muted hover:text-charcoal">
+                <i class="fa-solid fa-pen-to-square"></i> Write
+            </button>
+            <button onclick="switchMode('productive')" id="nav-productive" class="mode-btn flex-1 min-w-[70px] py-2 px-3 rounded-xl text-xs font-bold transition-all text-center flex flex-col sm:flex-row items-center justify-center gap-1.5 text-muted hover:text-charcoal">
+                <i class="fa-solid fa-cubes"></i> Build
+            </button>
+        </nav>
+    </header>
+
+    <div id="toast" class="hidden fixed top-20 left-1/2 -translate-x-1/2 z-50 px-6 py-3 rounded-2xl bg-charcoal text-white text-sm font-bold shadow-flat-lg flex items-center gap-3 animate-pop">
+        <i id="toastIcon" class="fa-solid fa-circle-check text-sage"></i>
+        <span id="toastMsg">Great job!</span>
+    </div>
+
+    <!-- MAIN INTERACTIVE CONTAINER -->
+    <main class="flex-1 flex flex-col justify-center">
+
+        <!-- ================= MODE 1: VIEW & LIST ================= -->
+        <section id="mode-view" class="mode-section flex flex-col gap-3">
+            <div class="flex items-center justify-between px-1">
+                <span class="text-xs font-semibold text-muted tracking-wider uppercase" id="viewCountLabel">Showing 100 Verbs</span>
+                <div class="bg-cream p-1 rounded-xl flex items-center text-xs">
+                    <button id="viewToggleCard" onclick="toggleViewSubMode('card')" class="px-3 py-1 rounded-lg font-bold bg-white text-charcoal shadow-flat">Flashcards</button>
+                    <button id="viewToggleList" onclick="toggleViewSubMode('list')" class="px-3 py-1 rounded-lg font-medium text-muted hover:text-charcoal">Complete List</button>
+                </div>
+            </div>
+
+            <!-- Flashcards Sub-Mode -->
+            <div id="viewSubCard" class="flex flex-col items-center gap-3">
+                <div class="w-full max-w-md h-80 perspective-1000 cursor-pointer" onclick="flipFlashcard()">
+                    <div id="flashcardInner" class="relative w-full h-full duration-500 transform-style-3d transition-transform shadow-flat-lg rounded-3xl bg-white border border-cream">
+                        
+                        <!-- Front Face -->
+                        <div class="absolute inset-0 w-full h-full rounded-3xl p-6 flex flex-col justify-between backface-hidden bg-white">
+                            <div class="flex items-center justify-between text-muted text-xs">
+                                <span id="cardCategory" class="px-2.5 py-1 rounded-full bg-cream font-bold text-clay">Routines</span>
+                                <span class="flex items-center gap-1"><i class="fa-solid fa-rotate"></i> Tap to flip</span>
+                            </div>
+                            <div class="text-center my-auto">
+                                <div id="cardEmoji" class="text-6xl mb-2">🚗</div>
+                                <h2 id="cardVerb" class="text-2xl font-extrabold text-charcoal mb-0.5">drive a car</h2>
+                                <p id="cardForms" class="text-xs font-semibold text-clay mb-1">Past: drove | Participle: driven</p>
+                                <p id="cardPhonetic" class="text-xs text-muted italic">/draɪv ə kɑːr/</p>
+                            </div>
+                            <div class="flex justify-center">
+                                <button onclick="event.stopPropagation(); speakCurrentCard();" class="w-10 h-10 rounded-full bg-sage/10 text-sage hover:bg-sage hover:text-white transition flex items-center justify-center">
+                                    <i class="fa-solid fa-volume-high text-sm"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Back Face -->
+                        <div class="absolute inset-0 w-full h-full rounded-3xl p-6 flex flex-col justify-between backface-hidden rotate-y-180 bg-cream/40 border border-cream">
+                            <div class="flex items-center justify-between text-muted text-xs">
+                                <span class="font-bold text-clay">Definition & Usage</span>
+                                <span id="cardPrepBadge" class="px-2 py-0.5 rounded bg-sage/20 text-sage font-bold">Preposition: None</span>
+                            </div>
+                            <div class="text-center my-auto px-2">
+                                <p id="cardDefinition" class="text-sm font-semibold text-charcoal mb-3">Control and operate a motor vehicle.</p>
+                                <div class="bg-white p-3 rounded-2xl shadow-flat border border-cream">
+                                    <p id="cardExample" class="text-xs text-charcoal italic">"I drive a car to work every morning."</p>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <span class="text-[10px] text-muted tracking-wider uppercase font-bold">Cambridge A2 Core Vocabulary</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Controls -->
+                <div class="flex items-center gap-4">
+                    <button onclick="prevFlashcard()" class="w-11 h-11 rounded-2xl bg-white border border-cream hover:bg-cream text-charcoal shadow-flat flex items-center justify-center transition">
+                        <i class="fa-solid fa-arrow-left"></i>
+                    </button>
+                    <span id="flashcardCounter" class="text-xs font-bold text-muted px-4 py-1.5 bg-cream rounded-xl">1 / 100</span>
+                    <button onclick="nextFlashcard()" class="w-11 h-11 rounded-2xl bg-white border border-cream hover:bg-cream text-charcoal shadow-flat flex items-center justify-center transition">
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Complete List Sub-Mode -->
+            <div id="viewSubList" class="hidden flex-col gap-3">
+                <div class="relative">
+                    <input type="text" id="listSearch" oninput="filterList()" placeholder="Search from 100 verbs, collocations or prepositions..." class="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-white border border-cream text-sm focus:outline-none focus:border-sage shadow-inner-soft">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3.5 text-muted text-xs"></i>
+                </div>
+                <div id="listContainer" class="max-h-[400px] overflow-y-auto space-y-2 pr-1">
+                    <!-- Populated dynamically -->
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ================= MODE 2: MATCHING GAME ================= -->
+        <section id="mode-match" class="mode-section hidden flex-col gap-3">
+            <div class="flex items-center justify-between px-1">
+                <span class="text-xs font-semibold text-muted tracking-wider uppercase">Matching Pair Challenge</span>
+                <div class="text-xs font-bold text-sage bg-sage/10 px-3 py-1 rounded-xl">
+                    Matched: <span id="matchScore">0</span> / 6
+                </div>
+            </div>
+
+            <p class="text-xs text-muted text-center">Tap a verb on the left, then tap its matching collocation/phrase on the right!</p>
+
+            <div class="grid grid-cols-2 gap-3 sm:gap-4 max-w-xl mx-auto w-full">
+                <div id="matchLeftCol" class="flex flex-col gap-2"></div>
+                <div id="matchRightCol" class="flex flex-col gap-2"></div>
+            </div>
+
+            <div class="flex justify-center mt-2">
+                <button onclick="initMatchGame()" class="px-4 py-2 rounded-xl bg-cream hover:bg-creamDark text-charcoal text-xs font-bold transition flex items-center gap-2">
+                    <i class="fa-solid fa-arrows-rotate"></i> Deal New Set
+                </button>
+            </div>
+        </section>
+
+
+        <!-- ================= MODE 3: TIMED GAPFILL ================= -->
+        <section id="mode-gapfill" class="mode-section hidden flex-col gap-4">
+            <div class="bg-white p-3.5 rounded-3xl shadow-flat border border-cream flex flex-col gap-1.5">
+                <div class="flex items-center justify-between text-xs font-bold">
+                    <span class="text-clay flex items-center gap-1.5">
+                        <i class="fa-solid fa-bomb animate-bounce"></i> Defuse Time!
+                    </span>
+                    <span id="gapTimerText" class="text-charcoal font-mono text-sm">12s</span>
+                </div>
+                <div class="w-full bg-cream h-2.5 rounded-full overflow-hidden">
+                    <div id="gapTimerBar" class="bg-clay h-full w-full transition-all duration-100 ease-linear"></div>
+                </div>
+            </div>
+
+            <div id="gapCard" class="bg-white p-6 sm:p-8 rounded-3xl shadow-flat-lg border border-cream text-center flex flex-col items-center justify-center min-h-[190px]">
+                <div id="gapEmoji" class="text-5xl mb-2">🚌</div>
+                <p id="gapSentence" class="text-base sm:text-lg font-medium text-charcoal leading-relaxed mb-3">
+                    Every morning, I <span class="px-3 py-1 bg-cream rounded-xl text-clay font-bold border-b-2 border-clay">____</span> a bus to work.
+                </p>
+                <p id="gapHint" class="text-xs text-muted italic">Select the verb that completes the collocation.</p>
+            </div>
+
+            <div id="gapOptions" class="grid grid-cols-2 gap-2.5 max-w-md mx-auto w-full"></div>
+        </section>
+
+
+        <!-- ================= MODE 4: WRITE WITH HINTS ================= -->
+        <section id="mode-write" class="mode-section hidden flex-col gap-4">
+            <div class="flex items-center justify-between px-1">
+                <span class="text-xs font-semibold text-muted tracking-wider uppercase">Spelling & Typing</span>
+                <button onclick="revealWriteHint()" class="text-xs font-bold text-clay bg-clayLight px-3 py-1 rounded-xl hover:bg-clay/20 transition flex items-center gap-1">
+                    <i class="fa-solid fa-lightbulb"></i> Need Hint?
+                </button>
+            </div>
+
+            <div id="writeCard" class="bg-white p-6 sm:p-8 rounded-3xl shadow-flat border border-cream text-center flex flex-col items-center">
+                <div id="writeEmoji" class="text-5xl mb-2">✉️</div>
+                <h3 id="writePrompt" class="text-xs font-bold text-muted uppercase tracking-wider mb-2">Complete the verb collocation:</h3>
+                <p id="writeContext" class="text-base sm:text-lg text-charcoal font-medium mb-4">
+                    "I need to <span id="writePlaceholder" class="font-bold text-clay underline">_______</span> an email to my manager."
+                </p>
+
+                <div id="writeHintBox" class="hidden text-xs bg-sageLight text-sage font-semibold px-4 py-2 rounded-xl mb-3">
+                    Hint: Starts with '<span id="writeFirstLetter">s</span>' (<span id="writeWordLen">4</span> letters)
+                </div>
+
+                <form onsubmit="handleWriteSubmit(event)" class="w-full max-w-xs flex gap-2">
+                    <input type="text" id="writeInput" autocomplete="off" placeholder="Type missing verb..." class="flex-1 px-4 py-3 rounded-2xl bg-cream/50 border border-cream text-center font-bold text-charcoal text-base focus:outline-none focus:border-sage shadow-inner-soft">
+                    <button type="submit" class="px-5 py-3 rounded-2xl bg-sage hover:bg-sage/90 text-white font-bold transition shadow-flat">
+                        Check
+                    </button>
+                </form>
+            </div>
+        </section>
+
+
+        <!-- ================= MODE 5: PRODUCTIVE BUILDER ================= -->
+        <section id="mode-productive" class="mode-section hidden flex-col gap-4">
+            <div class="flex items-center justify-between px-1">
+                <span class="text-xs font-semibold text-muted tracking-wider uppercase">Guided Sentence Builder</span>
+                <span class="text-xs text-muted">Assemble the correct A2 sentence</span>
+            </div>
+
+            <div class="bg-white p-4 rounded-3xl shadow-flat border border-cream text-center">
+                <span id="prodEmoji" class="text-4xl mb-1 block">🎧</span>
+                <h3 id="prodScenarioTitle" class="font-bold text-sm text-charcoal">Express your hobby</h3>
+                <p id="prodScenarioDesc" class="text-xs text-muted">Build a sentence expressing listening to music in bed.</p>
+            </div>
+
+            <div class="bg-cream/40 p-4 min-h-[85px] rounded-2xl border-2 border-dashed border-creamDark flex flex-wrap items-center justify-center gap-2" id="prodDropZone">
+            </div>
+
+            <div class="flex flex-wrap items-center justify-center gap-2 max-w-lg mx-auto" id="prodWordBank">
+            </div>
+
+            <div class="flex items-center justify-center gap-3">
+                <button onclick="clearProdSentence()" class="px-4 py-2 rounded-2xl bg-cream hover:bg-creamDark text-charcoal text-xs font-bold transition">
+                    Clear
+                </button>
+                <button onclick="checkProdSentence()" class="px-6 py-2 rounded-2xl bg-clay hover:bg-clay/90 text-white text-xs font-bold transition shadow-flat flex items-center gap-1.5">
+                    <i class="fa-solid fa-circle-check"></i> Verify Sentence
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Bottom Performance Bar -->
+    <footer class="mt-5 pt-3 border-t border-cream">
+        <div class="flex items-center justify-between text-xs font-semibold text-muted mb-1">
+            <span id="progressModeLabel">Dataset Mastery Progress</span>
+            <span id="progressPercentText">0%</span>
+        </div>
+        <div class="w-full bg-cream h-2.5 rounded-full overflow-hidden">
+            <div id="globalProgressBar" class="bg-sage h-full w-0 transition-all duration-300"></div>
+        </div>
+    </footer>
+
+
+    <script>
+        /* ==========================================================================
+           1. COMPLETE 100 HIGH-FREQUENCY A2 CAMBRIDGE VERBS DATASET
+           ========================================================================== */
+        const VERB_DATA_100 = [
+            // Routines & Home
+            { id: 1, verb: "drive", past: "drove", participle: "driven", collocation: "a car", preposition: "", full: "drive a car", emoji: "🚗", cat: "Travel", phonetic: "/draɪv ə kɑːr/", def: "To operate and control a vehicle.", example: "I drive a car to work every morning." },
+            { id: 2, verb: "order", past: "ordered", participle: "ordered", collocation: "a pizza", preposition: "", full: "order a pizza", emoji: "🍕", cat: "Food", phonetic: "/ˈɔːrdər ə ˈpiːtsə/", def: "To request food to be prepared or delivered.", example: "Let's order a pizza for dinner tonight!" },
+            { id: 3, verb: "drink", past: "drank", participle: "drunk", collocation: "a Coke", preposition: "", full: "drink a Coke", emoji: "🥤", cat: "Food", phonetic: "/drɪŋk ə koʊk/", def: "To swallow liquid.", example: "She likes to drink a Coke with her lunch." },
+            { id: 4, verb: "catch", past: "caught", participle: "caught", collocation: "a bus", preposition: "", full: "catch a bus", emoji: "🚌", cat: "Travel", phonetic: "/kætʃ ə bʌs/", def: "To board a public transport vehicle on time.", example: "Hurry up if you want to catch the bus!" },
+            { id: 5, verb: "meet", past: "met", participle: "met", collocation: "a friend", preposition: "", full: "meet a friend", emoji: "👥", cat: "Social", phonetic: "/miːt ə frend/", def: "To gather socially with someone.", example: "I will meet a friend at the central cafe." },
+            { id: 6, verb: "read", past: "read", participle: "read", collocation: "a book", preposition: "", full: "read a book", emoji: "📚", cat: "Leisure", phonetic: "/riːd ə bʊk/", def: "To look at and comprehend written text.", example: "He loves to read a book before going to sleep." },
+            { id: 7, verb: "send", past: "sent", participle: "sent", collocation: "an email", preposition: "", full: "send an email", emoji: "✉️", cat: "Work", phonetic: "/send ən ˈiːmeɪl/", def: "To transmit a electronic message.", example: "Please send an email to confirm your booking." },
+            { id: 8, verb: "stay", past: "stayed", participle: "stayed", collocation: "in my bed", preposition: "in", full: "stay in my bed", emoji: "🛏️", cat: "Routines", phonetic: "/steɪ ɪn maɪ bed/", def: "To remain in bed without getting up.", example: "On Sundays, I like to stay in my bed until 10 AM." },
+            { id: 9, verb: "swim", past: "swam", participle: "swum", collocation: "in the pool", preposition: "in", full: "swim in the pool", emoji: "🏊", cat: "Leisure", phonetic: "/swɪm ɪn ðə puːl/", def: "To propel oneself through water.", example: "The children swim in the pool during summer." },
+            { id: 10, verb: "listen", past: "listened", participle: "listened", collocation: "to music", preposition: "to", full: "listen to music", emoji: "🎧", cat: "Leisure", phonetic: "/ˈlɪs.ən tuː ˈmjuː.zɪk/", def: "To pay attention to audio or songs.", example: "I listen to music while studying for exams." },
+
+            { id: 11, verb: "speak", past: "spoke", participle: "spoken", collocation: "English", preposition: "", full: "speak English", emoji: "🗣️", cat: "Social", phonetic: "/spiːk ˈɪŋɡlɪʃ/", def: "To communicate using words in a language.", example: "They speak English fluently at work." },
+            { id: 12, verb: "buy", past: "bought", participle: "bought", collocation: "groceries", preposition: "", full: "buy groceries", emoji: "🛒", cat: "Routines", phonetic: "/baɪ ˈɡroʊsəriz/", def: "To obtain goods by paying money.", example: "We buy groceries at the supermarket on Saturday." },
+            { id: 13, verb: "wear", past: "wore", participle: "worn", collocation: "a jacket", preposition: "", full: "wear a jacket", emoji: "🧥", cat: "Routines", phonetic: "/weər ə ˈdʒækɪt/", def: "To have clothing on one's body.", example: "You should wear a jacket because it is cold." },
+            { id: 14, verb: "cook", past: "cooked", participle: "cooked", collocation: "dinner", preposition: "", full: "cook dinner", emoji: "🍳", cat: "Food", phonetic: "/kʊk ˈdɪnər/", def: "To prepare hot food for eating.", example: "My dad likes to cook dinner for the family." },
+            { id: 15, verb: "fly", past: "flew", participle: "flown", collocation: "a plane", preposition: "", full: "fly a plane", emoji: "✈️", cat: "Travel", phonetic: "/flaɪ ə pleɪn/", def: "To travel or navigate through the air.", example: "Pilots learn how to fly a plane safely." },
+            { id: 16, verb: "ride", past: "rode", participle: "ridden", collocation: "a bike", preposition: "", full: "ride a bike", emoji: "🚲", cat: "Leisure", phonetic: "/raɪd ə baɪk/", def: "To sit on and control a bicycle.", example: "Kids ride a bike to school in the morning." },
+            { id: 17, verb: "play", past: "played", participle: "played", collocation: "football", preposition: "", full: "play football", emoji: "⚽", cat: "Leisure", phonetic: "/pleɪ ˈfʊtbɔːl/", def: "To participate in a sport or game.", example: "We play football in the park on weekends." },
+            { id: 18, verb: "watch", past: "watched", participle: "watched", collocation: "a movie", preposition: "", full: "watch a movie", emoji: "🎬", cat: "Leisure", phonetic: "/wɑːtʃ ə ˈmuːvi/", def: "To look at moving images for entertainment.", example: "Let's watch a movie at the cinema tonight." },
+            { id: 19, verb: "visit", past: "visited", participle: "visited", collocation: "a museum", preposition: "", full: "visit a museum", emoji: "🏛️", cat: "Travel", phonetic: "/ˈvɪzɪt ə mjuˈziːəm/", def: "To go to see a place or person.", example: "Tourists visit a museum to see historical items." },
+            { id: 20, verb: "choose", past: "chose", participle: "chosen", collocation: "a dress", preposition: "", full: "choose a dress", emoji: "👗", cat: "Routines", phonetic: "/tʃuːz ə dres/", def: "To pick out from several options.", example: "She needs to choose a dress for the party." },
+
+            { id: 21, verb: "decide", past: "decided", participle: "decided", collocation: "on a plan", preposition: "on", full: "decide on a plan", emoji: "🤔", cat: "Work", phonetic: "/dɪˈsaɪd ɒn ə plæn/", def: "To make up one's mind about something.", example: "We need to decide on a plan for tomorrow." },
+            { id: 22, verb: "learn", past: "learned", participle: "learned", collocation: "a language", preposition: "", full: "learn a language", emoji: "🧠", cat: "Work", phonetic: "/lɜːrn ə ˈlæŋɡwɪdʒ/", def: "To gain knowledge or skill through study.", example: "It takes time to learn a language well." },
+            { id: 23, verb: "teach", past: "taught", participle: "taught", collocation: "students", preposition: "", full: "teach students", emoji: "👩‍🏫", cat: "Work", phonetic: "/tiːtʃ ˈstjuːdnts/", def: "To give knowledge or lessons to others.", example: "Teachers teach students math and science." },
+            { id: 24, verb: "clean", past: "cleaned", participle: "cleaned", collocation: "the room", preposition: "", full: "clean the room", emoji: "🧹", cat: "Routines", phonetic: "/kliːn ðə ruːm/", def: "To remove dirt or mess from a space.", example: "Please clean the room before guests arrive." },
+            { id: 25, verb: "wash", past: "washed", participle: "washed", collocation: "the dishes", preposition: "", full: "wash the dishes", emoji: "🧼", cat: "Routines", phonetic: "/wɑːʃ ðə dɪʃɪz/", def: "To clean plates and cutlery with water and soap.", example: "I wash the dishes right after dinner." },
+            { id: 26, verb: "open", past: "opened", participle: "opened", collocation: "the window", preposition: "", full: "open the window", emoji: "🪟", cat: "Routines", phonetic: "/ˈoʊpən ðə ˈwɪndoʊ/", def: "To move something so it is not closed.", example: "Can you open the window for fresh air?" },
+            { id: 27, verb: "close", past: "closed", participle: "closed", collocation: "the door", preposition: "", full: "close the door", emoji: "🚪", cat: "Routines", phonetic: "/kloʊz ðə dɔːr/", def: "To shut a door or cover.", example: "Please close the door when you leave." },
+            { id: 28, verb: "start", past: "started", participle: "started", collocation: "the engine", preposition: "", full: "start the engine", emoji: "🔑", cat: "Travel", phonetic: "/stɑːrt ðə ˈendʒɪn/", def: "To begin an activity or turn on a machine.", example: "Turn the key to start the engine." },
+            { id: 29, verb: "finish", past: "finished", participle: "finished", collocation: "homework", preposition: "", full: "finish homework", emoji: "📝", cat: "Work", phonetic: "/ˈfɪnɪʃ ˈhoʊmwɜːrk/", def: "To complete an assignment or job.", example: "I must finish homework before watching TV." },
+            { id: 30, verb: "live", past: "lived", participle: "lived", collocation: "in a house", preposition: "in", full: "live in a house", emoji: "🏡", cat: "Routines", phonetic: "/lɪv ɪn ə haʊs/", def: "To have one's permanent residence.", example: "My grandparents live in a house near the beach." },
+
+            { id: 31, verb: "work", past: "worked", participle: "worked", collocation: "in an office", preposition: "in", full: "work in an office", emoji: "🏢", cat: "Work", phonetic: "/wɜːrk ɪn ən ˈɒfɪs/", def: "To perform job duties at a workplace.", example: "Many people work in an office in the city." },
+            { id: 32, verb: "give", past: "gave", participle: "given", collocation: "a present", preposition: "", full: "give a present", emoji: "🎁", cat: "Social", phonetic: "/ɡɪv ə ˈpreznt/", def: "To hand over a gift to someone.", example: "I will give a present to my friend for her birthday." },
+            { id: 33, verb: "take", past: "took", participle: "taken", collocation: "a photo", preposition: "", full: "take a photo", emoji: "📸", cat: "Leisure", phonetic: "/teɪk ə ˈfoʊtoʊ/", def: "To capture an image with a camera.", example: "Let's take a photo together in front of the castle." },
+            { id: 34, verb: "bring", past: "brought", participle: "brought", collocation: "an umbrella", preposition: "", full: "bring an umbrella", emoji: "☂️", cat: "Routines", phonetic: "/brɪŋ ən ʌmˈbrelə/", def: "To carry something with you to a place.", example: "Always bring an umbrella when it looks like rain." },
+            { id: 35, verb: "find", past: "found", participle: "found", collocation: "the keys", preposition: "", full: "find the keys", emoji: "🔍", cat: "Routines", phonetic: "/faɪnd ðə kiːz/", def: "To discover where something lost is located.", example: "I hope I can find the keys to my apartment." },
+            { id: 36, verb: "lose", past: "lost", participle: "lost", collocation: "a wallet", preposition: "", full: "lose a wallet", emoji: "👛", cat: "Routines", phonetic: "/luːz ə ˈwɑːlɪt/", def: "To no longer have something because you misplaced it.", example: "Be careful not to lose a wallet on the train." },
+            { id: 37, verb: "make", past: "made", participle: "made", collocation: "a cake", preposition: "", full: "make a cake", emoji: "🎂", cat: "Food", phonetic: "/meɪk ə keɪk/", def: "To construct, bake or create something.", example: "My mother will make a cake for Sunday dessert." },
+            { id: 38, verb: "do", past: "did", participle: "done", collocation: "exercise", preposition: "", full: "do exercise", emoji: "🏋️", cat: "Leisure", phonetic: "/duː ˈeksərsaɪz/", def: "To perform physical workout activities.", example: "It is healthy to do exercise every morning." },
+            { id: 39, verb: "say", past: "said", participle: "said", collocation: "hello", preposition: "", full: "say hello", emoji: "👋", cat: "Social", phonetic: "/seɪ həˈloʊ/", def: "To speak a greeting out loud.", example: "Always say hello when you meet someone." },
+            { id: 40, verb: "tell", past: "told", participle: "told", collocation: "a story", preposition: "", full: "tell a story", emoji: "📖", cat: "Social", phonetic: "/tel ə ˈstɔːri/", def: "To relate a tale or narrative verbally.", example: "Grandpa likes to tell a story about his childhood." },
+
+            { id: 41, verb: "ask", past: "asked", participle: "asked", collocation: "a question", preposition: "", full: "ask a question", emoji: "❓", cat: "Work", phonetic: "/æsk ə ˈkwestʃən/", def: "To inquire about something.", example: "Raise your hand if you want to ask a question." },
+            { id: 42, verb: "answer", past: "answered", participle: "answered", collocation: "the phone", preposition: "", full: "answer the phone", emoji: "📞", cat: "Social", phonetic: "/ˈænsər ðə foʊn/", def: "To reply or pick up a ringing telephone.", example: "Can you answer the phone while I am cooking?" },
+            { id: 43, verb: "help", past: "helped", participle: "helped", collocation: "a neighbor", preposition: "", full: "help a neighbor", emoji: "🤝", cat: "Social", phonetic: "/help ə ˈneɪbər/", def: "To assist or give support to someone.", example: "It is good to help a neighbor carry bags." },
+            { id: 44, verb: "need", past: "needed", participle: "needed", collocation: "some help", preposition: "", full: "need some help", emoji: "🆘", cat: "Social", phonetic: "/niːd sʌm help/", def: "To require assistance or something essential.", example: "Call me if you need some help moving furniture." },
+            { id: 45, verb: "want", past: "wanted", participle: "wanted", collocation: "an ice cream", preposition: "", full: "want an ice cream", emoji: "🍦", cat: "Food", phonetic: "/wɑːnt ən aɪs kriːm/", def: "To desire something.", example: "The kids want an ice cream on a hot day." },
+            { id: 46, verb: "like", past: "liked", participle: "liked", collocation: "chocolate", preposition: "", full: "like chocolate", emoji: "🍫", cat: "Food", phonetic: "/laɪk ˈtʃɒklət/", def: "To find something pleasant or enjoyable.", example: "Most young children like chocolate sweets." },
+            { id: 47, verb: "love", past: "loved", participle: "loved", collocation: "animals", preposition: "", full: "love animals", emoji: "🐶", cat: "Leisure", phonetic: "/lʌv ˈænɪmlz/", def: "To have a strong affection or passion for.", example: "Vets love animals and take good care of them." },
+            { id: 48, verb: "hate", past: "hated", participle: "hated", collocation: "rainy days", preposition: "", full: "hate rainy days", emoji: "🌧️", cat: "Routines", phonetic: "/heɪt ˈreɪni deɪz/", def: "To strongly dislike something.", example: "I hate rainy days because I cannot go cycling." },
+            { id: 49, verb: "prefer", past: "preferred", participle: "preferred", collocation: "tea to coffee", preposition: "to", full: "prefer tea to coffee", emoji: "🍵", cat: "Food", phonetic: "/prɪˈfɜːr tiː tuː ˈkɒfi/", def: "To like one thing better than another.", example: "British people often prefer tea to coffee." },
+            { id: 50, verb: "hope", past: "hoped", participle: "hoped", collocation: "for sunshine", preposition: "for", full: "hope for sunshine", emoji: "☀️", cat: "Routines", phonetic: "/hoʊp fɔːr ˈsʌnʃaɪn/", def: "To wish for a favorable outcome.", example: "We hope for sunshine on our picnic day." },
+
+            { id: 51, verb: "think", past: "thought", participle: "thought", collocation: "about a problem", preposition: "about", full: "think about a problem", emoji: "💡", cat: "Work", phonetic: "/θɪŋk əˈbaʊt ə ˈprɒbləm/", def: "To use one's mind to consider something.", example: "Take time to think about a problem before deciding." },
+            { id: 52, verb: "know", past: "knew", participle: "known", collocation: "the answer", preposition: "", full: "know the answer", emoji: "✅", cat: "Work", phonetic: "/noʊ ðə ˈænsər/", def: "To understand or possess information.", example: "I know the answer to question number three." },
+            { id: 53, verb: "understand", past: "understood", participle: "understood", collocation: "the rule", preposition: "", full: "understand the rule", emoji: "🧠", cat: "Work", phonetic: "/ˌʌndərˈstænd ðə ruːl/", def: "To comprehend the meaning of something.", example: "Make sure you understand the rule before playing." },
+            { id: 54, verb: "remember", past: "remembered", participle: "remembered", collocation: "a name", preposition: "", full: "remember a name", emoji: "💭", cat: "Social", phonetic: "/rɪˈmembər ə neɪm/", def: "To retain memory of someone or something.", example: "It is polite to remember a name after meeting." },
+            { id: 55, verb: "forget", past: "forgot", participle: "forgotten", collocation: "the password", preposition: "", full: "forget the password", emoji: "🔐", cat: "Work", phonetic: "/fərˈɡet ðə ˈpæswɜːrd/", def: "To fail to recall information.", example: "Don't forget the password for your online account." },
+            { id: 56, verb: "call", past: "called", participle: "called", collocation: "a taxi", preposition: "", full: "call a taxi", emoji: "🚕", cat: "Travel", phonetic: "/kɔːl ə ˈtæksi/", def: "To summon a cab or speak on phone.", example: "We should call a taxi because it is late." },
+            { id: 57, verb: "pay", past: "paid", participle: "paid", collocation: "for the coffee", preposition: "for", full: "pay for the coffee", emoji: "☕", cat: "Food", phonetic: "/peɪ fɔːr ðə ˈkɒfi/", def: "To give money for goods or services.", example: "I will pay for the coffee with cash." },
+            { id: 58, verb: "spend", past: "spent", participle: "spent", collocation: "money", preposition: "", full: "spend money", emoji: "💸", cat: "Routines", phonetic: "/spend ˈmʌni/", def: "To pay out money for goods.", example: "Be smart when you spend money on vacation." },
+            { id: 59, verb: "cost", past: "cost", participle: "cost", collocation: "ten dollars", preposition: "", full: "cost ten dollars", emoji: "💵", cat: "Routines", phonetic: "/kɒst ten ˈdɒlərz/", def: "To require a payment of a specific amount.", example: "The movie ticket will cost ten dollars." },
+            { id: 60, verb: "win", past: "won", participle: "won", collocation: "a trophy", preposition: "", full: "win a trophy", emoji: "🏆", cat: "Leisure", phonetic: "/wɪn ə ˈtroʊfi/", def: "To achieve victory in a match or contest.", example: "Our team hope to win a trophy this season." },
+
+            { id: 61, verb: "break", past: "broke", participle: "broken", collocation: "a glass", preposition: "", full: "break a glass", emoji: "🥛", cat: "Routines", phonetic: "/breɪk ə ɡlæs/", def: "To fracture or shatter into pieces.", example: "Be careful not to break a glass in the kitchen." },
+            { id: 62, verb: "fix", past: "fixed", participle: "fixed", collocation: "the car", preposition: "", full: "fix the car", emoji: "🔧", cat: "Routines", phonetic: "/fɪks ðə kɑːr/", def: "To repair or mend something broken.", example: "The mechanic can fix the car engine today." },
+            { id: 63, verb: "turn", past: "turned", participle: "turned", collocation: "on the light", preposition: "on", full: "turn on the light", emoji: "💡", cat: "Routines", phonetic: "/tɜːrn ɒn ðə laɪt/", def: "To activate a switch or light.", example: "Please turn on the light when it gets dark." },
+            { id: 64, verb: "change", past: "changed", participle: "changed", collocation: "clothes", preposition: "", full: "change clothes", emoji: "👔", cat: "Routines", phonetic: "/tʃeɪndʒ kloʊðz/", def: "To put on different clothing.", example: "I need to change clothes after the gym." },
+            { id: 65, verb: "travel", past: "traveled", participle: "traveled", collocation: "by train", preposition: "by", full: "travel by train", emoji: "🚆", cat: "Travel", phonetic: "/ˈtrævl baɪ treɪn/", def: "To go on a journey using transport.", example: "We prefer to travel by train across Europe." },
+            { id: 66, verb: "arrive", past: "arrived", participle: "arrived", collocation: "at the station", preposition: "at", full: "arrive at the station", emoji: "🚉", cat: "Travel", phonetic: "/əˈraɪv æt ðə ˈsteɪʃn/", def: "To reach a destination.", example: "We will arrive at the station at 5 PM." },
+            { id: 67, verb: "leave", past: "left", participle: "left", collocation: "the house", preposition: "", full: "leave the house", emoji: "🚪", cat: "Routines", phonetic: "/liːv ðə haʊs/", def: "To depart from a location.", example: "I leave the house at 8 AM for school." },
+            { id: 68, verb: "move", past: "moved", participle: "moved", collocation: "to a new city", preposition: "to", full: "move to a new city", emoji: "📦", cat: "Travel", phonetic: "/muːv tuː ə njuː ˈsɪti/", def: "To change residence or location.", example: "They plan to move to a new city next year." },
+            { id: 69, verb: "stop", past: "stopped", participle: "stopped", collocation: "the car", preposition: "", full: "stop the car", emoji: "🛑", cat: "Travel", phonetic: "/stɒp ðə kɑːr/", def: "To halt movement or activity.", example: "You must stop the car at red traffic lights." },
+            { id: 70, verb: "wait", past: "waited", participle: "waited", collocation: "for the train", preposition: "for", full: "wait for the train", emoji: "⏳", cat: "Travel", phonetic: "/weɪt fɔːr ðə treɪn/", def: "To remain in a place until something arrives.", example: "Passengers wait for the train on platform 2." },
+
+            { id: 71, verb: "use", past: "used", participle: "used", collocation: "a computer", preposition: "", full: "use a computer", emoji: "💻", cat: "Work", phonetic: "/juːz ə kəmˈpjuːtər/", def: "To operate or employ an instrument.", example: "I use a computer to write articles." },
+            { id: 72, verb: "show", past: "showed", participle: "shown", collocation: "a picture", preposition: "", full: "show a picture", emoji: "🖼️", cat: "Social", phonetic: "/ʃoʊ ə ˈpɪktʃər/", def: "To display or allow someone to see something.", example: "Let me show a picture from my vacation." },
+            { id: 73, verb: "try", past: "tried", participle: "tried", collocation: "new food", preposition: "", full: "try new food", emoji: "🍱", cat: "Food", phonetic: "/traɪ njuː fuːd/", def: "To attempt or sample something new.", example: "It is fun to try new food when traveling." },
+            { id: 74, verb: "feel", past: "felt", participle: "felt", collocation: "happy", preposition: "", full: "feel happy", emoji: "😊", cat: "Routines", phonetic: "/fiːl ˈhæpi/", def: "To experience an emotion or sensation.", example: "I feel happy when the sun shines." },
+            { id: 75, verb: "become", past: "became", participle: "become", collocation: "a doctor", preposition: "", full: "become a doctor", emoji: "🩺", cat: "Work", phonetic: "/bɪˈkʌm ə ˈdɒktər/", def: "To grow to be or turn into.", example: "She wants to become a doctor after university." },
+            { id: 76, verb: "mean", past: "meant", participle: "meant", collocation: "something important", preposition: "", full: "mean something important", emoji: "💬", cat: "Work", phonetic: "/miːn ˈsʌmθɪŋ ɪmˈpɔːrtnt/", def: "To signify or convey a message.", example: "What does this red sign mean?" },
+            { id: 77, verb: "let", past: "let", participle: "let", collocation: "someone enter", preposition: "", full: "let someone enter", emoji: "🔓", cat: "Social", phonetic: "/let ˈsʌmwʌn ˈentər/", def: "To allow or give permission.", example: "Please let someone enter through the gate." },
+            { id: 78, verb: "put", past: "put", participle: "put", collocation: "on shoes", preposition: "on", full: "put on shoes", emoji: "👟", cat: "Routines", phonetic: "/pʊt ɒn ʃuːz/", def: "To place clothing onto one's body.", example: "Put on shoes before going outside to play." },
+            { id: 79, verb: "keep", past: "kept", participle: "kept", collocation: "a secret", preposition: "", full: "keep a secret", emoji: "🤫", cat: "Social", phonetic: "/kiːp ə ˈsiːkrət/", def: "To maintain or hold without revealing.", example: "Can you keep a secret about the surprise party?" },
+            { id: 80, verb: "hold", past: "held", participle: "held", collocation: "an umbrella", preposition: "", full: "hold an umbrella", emoji: "☔", cat: "Routines", phonetic: "/hoʊld ən ʌmˈbrelə/", def: "To grasp or carry with hands.", example: "Hold an umbrella so you don't get wet." },
+
+            { id: 81, verb: "carry", past: "carried", participle: "carried", collocation: "a heavy bag", preposition: "", full: "carry a heavy bag", emoji: "🎒", cat: "Routines", phonetic: "/ˈkæri ə ˈhevi bæɡ/", def: "To support and move something heavy.", example: "He helped carry a heavy bag up the stairs." },
+            { id: 82, verb: "fall", past: "fell", participle: "fallen", collocation: "asleep", preposition: "", full: "fall asleep", emoji: "😴", cat: "Routines", phonetic: "/fɔːl əˈsliːp/", def: "To transition into sleeping state.", example: "Babies fall asleep quickly after feeding." },
+            { id: 83, verb: "stand", past: "stood", participle: "stood", collocation: "in line", preposition: "in", full: "stand in line", emoji: "🚶‍♂️", cat: "Social", phonetic: "/stænd ɪn laɪn/", def: "To maintain an upright position on feet.", example: "People stand in line to buy movie tickets." },
+            { id: 84, verb: "sit", past: "sat", participle: "sat", collocation: "on a chair", preposition: "on", full: "sit on a chair", emoji: "🪑", cat: "Routines", phonetic: "/sɪt ɒn ə tʃeər/", def: "To rest with one's body on a seat.", example: "Please sit on a chair and relax." },
+            { id: 85, verb: "run", past: "ran", participle: "run", collocation: "a marathon", preposition: "", full: "run a marathon", emoji: "🏃", cat: "Leisure", phonetic: "/rʌn ə ˈmærəθɑːn/", def: "To move rapidly on foot.", example: "Athletes train hard to run a marathon." },
+            { id: 86, verb: "walk", past: "walked", participle: "walked", collocation: "in the park", preposition: "in", full: "walk in the park", emoji: "🚶", cat: "Leisure", phonetic: "/wɔːk ɪn ðə pɑːrk/", def: "To travel on foot at a natural pace.", example: "We like to walk in the park on sunny days." },
+            { id: 87, verb: "dance", past: "danced", participle: "danced", collocation: "to music", preposition: "to", full: "dance to music", emoji: "💃", cat: "Leisure", phonetic: "/dæns tuː ˈmjuːzɪk/", def: "To move rhythmically to music.", example: "They dance to music at wedding parties." },
+            { id: 88, verb: "sing", past: "sang", participle: "sung", collocation: "a song", preposition: "", full: "sing a song", emoji: "🎤", cat: "Leisure", phonetic: "/sɪŋ ə sɒŋ/", def: "To produce musical vocal sounds.", example: "Children sing a song during music class." },
+            { id: 89, verb: "laugh", past: "laughed", participle: "laughed", collocation: "at a joke", preposition: "at", full: "laugh at a joke", emoji: "😂", cat: "Social", phonetic: "/læf æt ə dʒoʊk/", def: "To express amusement audibly.", example: "We all laugh at a funny joke." },
+            { id: 90, verb: "cry", past: "cried", participle: "cried", collocation: "during a movie", preposition: "during", full: "cry during a movie", emoji: "😢", cat: "Leisure", phonetic: "/kraɪ ˈdʊrɪŋ ə ˈmuːvi/", def: "To shed tears from emotion.", example: "Some people cry during a sad movie." },
+
+            { id: 91, verb: "eat", past: "ate", participle: "eaten", collocation: "an apple", preposition: "", full: "eat an apple", emoji: "🍎", cat: "Food", phonetic: "/iːt ən ˈæpl/", def: "To consume food orally.", example: "Eat an apple every day for good health." },
+            { id: 92, verb: "look", past: "looked", participle: "looked", collocation: "at a map", preposition: "at", full: "look at a map", emoji: "🗺️", cat: "Travel", phonetic: "/lʊk æt ə mæp/", def: "To direct one's eyes towards something.", example: "Always look at a map when you are lost." },
+            { id: 93, verb: "see", past: "saw", participle: "seen", collocation: "a doctor", preposition: "", full: "see a doctor", emoji: "🩺", cat: "Routines", phonetic: "/siː ə ˈdɒktər/", def: "To perceive with eyes or visit professionally.", example: "If you feel sick, you should see a doctor." },
+            { id: 94, verb: "hear", past: "heard", participle: "heard", collocation: "a noise", preposition: "", full: "hear a noise", emoji: "👂", cat: "Routines", phonetic: "/hɪər ə nɔɪz/", def: "To perceive sound with ears.", example: "Did you hear a strange noise outside?" },
+            { id: 95, verb: "talk", past: "talked", participle: "talked", collocation: "to a teacher", preposition: "to", full: "talk to a teacher", emoji: "👩‍🏫", cat: "Social", phonetic: "/tɔːk tuː ə ˈtiːtʃər/", def: "To converse or speak with someone.", example: "You can talk to a teacher if you need help." },
+            { id: 96, verb: "study", past: "studied", participle: "studied", collocation: "for an exam", preposition: "for", full: "study for an exam", emoji: "📑", cat: "Work", phonetic: "/ˈstʌdi fɔːr ən ɪɡˈzæm/", def: "To devote time to acquiring knowledge.", example: "Students study for an exam in the library." },
+            { id: 97, verb: "pass", past: "passed", participle: "passed", collocation: "a test", preposition: "", full: "pass a test", emoji: "💯", cat: "Work", phonetic: "/pæs ə test/", def: "To achieve a successful grade in a test.", example: "She worked hard to pass a test with top marks." },
+            { id: 98, verb: "fail", past: "failed", participle: "failed", collocation: "an exam", preposition: "", full: "fail an exam", emoji: "❌", cat: "Work", phonetic: "/feɪl ən ɪɡˈzæm/", def: "To be unsuccessful in a test.", example: "Don't worry if you fail an exam; try again." },
+            { id: 99, verb: "miss", past: "missed", participle: "missed", collocation: "the bus", preposition: "", full: "miss the bus", emoji: "🚏", cat: "Travel", phonetic: "/mɪs ðə bʌs/", def: "To fail to catch a transport vehicle.", example: "If you wake up late, you might miss the bus." },
+            { id: 100, verb: "search", past: "searched", participle: "searched", collocation: "for information", preposition: "for", full: "search for information", emoji: "🔎", cat: "Work", phonetic: "/sɜːrtʃ fɔːr ˌɪnfərˈmeɪʃn/", def: "To look carefully to find something.", example: "You can search for information on the internet." }
+        ];
+
+        const PRODUCTIVE_SCENARIOS = [
+            { emoji: "🎧", title: "Hobby & Relaxation", desc: "Express that you listen to music in bed.", correct: ["I", "listen to", "music", "in my bed"], options: ["I", "listen to", "music", "in my bed", "drive", "a car"] },
+            { emoji: "🚗", title: "Daily Commute", desc: "Say that you drive a car to work.", correct: ["I", "drive", "a car", "go to", "work"], options: ["I", "drive", "a car", "go to", "work", "swim", "in"] },
+            { emoji: "🍕", title: "Evening Plans", desc: "Express ordering a pizza with a friend.", correct: ["We", "order", "a pizza", "talk to", "a friend"], options: ["We", "order", "a pizza", "talk to", "a friend", "read", "email"] },
+            { emoji: "☕", title: "Cafe Habit", desc: "Say that you pay for the coffee with cash.", correct: ["I", "pay for", "the coffee", "with cash"], options: ["I", "pay for", "the coffee", "with cash", "fly", "plane"] },
+            { emoji: "📱", title: "Digital Work", desc: "Express sending an email on a computer.", correct: ["I", "send", "an email", "use a computer"], options: ["I", "send", "an email", "use a computer", "cook", "pizza"] }
+        ];
+
+        /* ==========================================================================
+           2. GLOBAL STATE & FILTER MANAGEMENT
+           ========================================================================== */
+        let activeDataSet = [...VERB_DATA_100];
+        let currentMode = 'view';
+        let audioEnabled = true;
+        let totalStars = 0;
+        let masteredIds = new Set();
+
+        let flashcardIndex = 0;
+        let flashcardFlipped = false;
+
+        let gapCurrentItem = null;
+        let gapTimerInterval = null;
+        let gapTimeLeft = 12;
+
+        let writeCurrentItem = null;
+
+        let prodCurrentIndex = 0;
+        let prodSelectedWords = [];
+
+        function applyFilters() {
+            const cat = document.getElementById('categorySelect').value;
+            const setSize = parseInt(document.getElementById('setSizeSelect').value);
+
+            let filtered = [...VERB_DATA_100];
+            if (cat !== 'All') {
+                filtered = filtered.filter(item => item.cat === cat);
+            }
+
+            activeDataSet = filtered.slice(0, setSize);
+
+            document.getElementById('viewCountLabel').innerText = `Showing ${activeDataSet.length} Verbs`;
+
+            // Reset indices
+            flashcardIndex = 0;
+            updateFlashcardUI();
+            renderCompleteList();
+
+            if (currentMode === 'match') initMatchGame();
+            if (currentMode === 'gapfill') loadGapfillQuestion();
+            if (currentMode === 'write') loadWriteQuestion();
+        }
+
+
+        /* ==========================================================================
+           3. WEB AUDIO & SOUND EFFECTS
+           ========================================================================== */
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        let audioCtx = null;
+
+        function initAudio() {
+            if (!audioCtx) audioCtx = new AudioContext();
+        }
+
+        function toggleAudio() {
+            audioEnabled = !audioEnabled;
+            document.getElementById('soundLabel').innerText = audioEnabled ? "Sound On" : "Muted";
+            document.getElementById('soundIcon').className = audioEnabled ? "fa-solid fa-volume-high text-sage" : "fa-solid fa-volume-xmark text-muted";
+        }
+
+        function playSound(type) {
+            if (!audioEnabled) return;
+            initAudio();
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const now = audioCtx.currentTime;
+
+            if (type === 'success') {
+                [523.25, 659.25, 783.99].forEach((freq, i) => {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(freq, now + i * 0.08);
+                    gain.gain.setValueAtTime(0.15, now + i * 0.08);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.08 + 0.3);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start(now + i * 0.08);
+                    osc.stop(now + i * 0.08 + 0.35);
+                });
+            } else if (type === 'error') {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(180, now);
+                osc.frequency.exponentialRampToValueAtTime(110, now + 0.2);
+                gain.gain.setValueAtTime(0.2, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.2);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start(now);
+                osc.stop(now + 0.2);
+            } else if (type === 'click') {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(400, now);
+                gain.gain.setValueAtTime(0.05, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start(now);
+                osc.stop(now + 0.05);
+            }
+        }
+
+        function speakCurrentCard() {
+            if (!('speechSynthesis' in window)) return;
+            window.speechSynthesis.cancel();
+            const text = activeDataSet[flashcardIndex].full;
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'en-US';
+            utterance.rate = 0.9;
+            window.speechSynthesis.speak(utterance);
+        }
+
+        /* ==========================================================================
+           4. FIREWORKS CANVAS CELEBRATION
+           ========================================================================== */
+        const canvas = document.getElementById('fxCanvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        function triggerFireworks() {
+            playSound('success');
+            const colors = ['#6E7F6F', '#D36B4C', '#F59E0B', '#10B981', '#6366F1'];
+            const x = canvas.width / 2;
+            const y = canvas.height / 3;
+
+            for (let i = 0; i < 50; i++) {
+                const angle = Math.random() * Math.PI * 2;
+                const speed = Math.random() * 6 + 2;
+                particles.push({
+                    x: x, y: y,
+                    vx: Math.cos(angle) * speed,
+                    vy: Math.sin(angle) * speed,
+                    radius: Math.random() * 3 + 2,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    alpha: 1,
+                    decay: Math.random() * 0.02 + 0.015
+                });
+            }
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach((p, index) => {
+                p.x += p.vx;
+                p.y += p.vy;
+                p.vy += 0.08;
+                p.alpha -= p.decay;
+
+                ctx.save();
+                ctx.globalAlpha = Math.max(0, p.alpha);
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                ctx.fillStyle = p.color;
+                ctx.fill();
+                ctx.restore();
+
+                if (p.alpha <= 0) particles.splice(index, 1);
+            });
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+
+        /* ==========================================================================
+           5. UI FEEDBACK & MASTERY TRACKING
+           ========================================================================== */
+        function showToast(msg, isSuccess = true) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMsg').innerText = msg;
+            document.getElementById('toastIcon').className = isSuccess ? "fa-solid fa-circle-check text-sage" : "fa-solid fa-circle-xmark text-clay";
+            toast.classList.remove('hidden');
+            setTimeout(() => toast.classList.add('hidden'), 2000);
+        }
+
+        function awardStar(id) {
+            if (id && !masteredIds.has(id)) {
+                masteredIds.add(id);
+                totalStars = masteredIds.size;
+                document.getElementById('totalStars').innerText = totalStars;
+                updateProgressBar();
+            }
+        }
+
+        function updateProgressBar() {
+            const pct = Math.min(100, Math.round((masteredIds.size / 100) * 100));
+            document.getElementById('globalProgressBar').style.width = pct + '%';
+            document.getElementById('progressPercentText').innerText = pct + '%';
+        }
+
+        /* ==========================================================================
+           6. NAVIGATION & MODES
+           ========================================================================== */
+        function switchMode(mode) {
+            playSound('click');
+            currentMode = mode;
+
+            document.querySelectorAll('.mode-btn').forEach(btn => {
+                btn.className = "mode-btn flex-1 min-w-[70px] py-2 px-3 rounded-xl text-xs font-bold transition-all text-center flex flex-col sm:flex-row items-center justify-center gap-1.5 text-muted hover:text-charcoal";
+            });
+            const activeBtn = document.getElementById(`nav-${mode}`);
+            if (activeBtn) {
+                activeBtn.className = "mode-btn flex-1 min-w-[70px] py-2 px-3 rounded-xl text-xs font-bold transition-all text-center flex flex-col sm:flex-row items-center justify-center gap-1.5 bg-white text-charcoal shadow-flat";
+            }
+
+            document.querySelectorAll('.mode-section').forEach(sec => sec.classList.add('hidden'));
+            const targetSec = document.getElementById(`mode-${mode}`);
+            if (targetSec) targetSec.classList.remove('hidden');
+
+            if (mode !== 'gapfill' && gapTimerInterval) clearInterval(gapTimerInterval);
+
+            if (mode === 'view') updateFlashcardUI();
+            if (mode === 'match') initMatchGame();
+            if (mode === 'gapfill') loadGapfillQuestion();
+            if (mode === 'write') loadWriteQuestion();
+            if (mode === 'productive') loadProdScenario();
+        }
+
+
+        /* ==========================================================================
+           7. MODE 1: VIEW & LIST LOGIC
+           ========================================================================== */
+        function toggleViewSubMode(sub) {
+            playSound('click');
+            const cardBtn = document.getElementById('viewToggleCard');
+            const listBtn = document.getElementById('viewToggleList');
+            const cardSec = document.getElementById('viewSubCard');
+            const listSec = document.getElementById('viewSubList');
+
+            if (sub === 'card') {
+                cardBtn.className = "px-3 py-1 rounded-lg font-bold bg-white text-charcoal shadow-flat";
+                listBtn.className = "px-3 py-1 rounded-lg font-medium text-muted hover:text-charcoal";
+                cardSec.classList.remove('hidden');
+                listSec.classList.add('hidden');
+            } else {
+                listBtn.className = "px-3 py-1 rounded-lg font-bold bg-white text-charcoal shadow-flat";
+                cardBtn.className = "px-3 py-1 rounded-lg font-medium text-muted hover:text-charcoal";
+                listSec.classList.remove('hidden');
+                cardSec.classList.add('hidden');
+                renderCompleteList();
+            }
+        }
+
+        function updateFlashcardUI() {
+            if (activeDataSet.length === 0) return;
+            const item = activeDataSet[flashcardIndex];
+            document.getElementById('cardEmoji').innerText = item.emoji;
+            document.getElementById('cardVerb').innerText = item.full;
+            document.getElementById('cardForms').innerText = `Past: ${item.past} | Participle: ${item.participle}`;
+            document.getElementById('cardPhonetic').innerText = item.phonetic;
+            document.getElementById('cardCategory').innerText = item.cat;
+            document.getElementById('cardDefinition').innerText = item.def;
+            document.getElementById('cardExample').innerText = `"${item.example}"`;
+            document.getElementById('cardPrepBadge').innerText = item.preposition ? `Preposition: "${item.preposition}"` : `Preposition: None`;
+            document.getElementById('flashcardCounter').innerText = `${flashcardIndex + 1} / ${activeDataSet.length}`;
+
+            flashcardFlipped = false;
+            document.getElementById('flashcardInner').classList.remove('rotate-y-180');
+        }
+
+        function flipFlashcard() {
+            playSound('click');
+            flashcardFlipped = !flashcardFlipped;
+            const inner = document.getElementById('flashcardInner');
+            if (flashcardFlipped) inner.classList.add('rotate-y-180');
+            else inner.classList.remove('rotate-y-180');
+        }
+
+        function nextFlashcard() {
+            playSound('click');
+            flashcardIndex = (flashcardIndex + 1) % activeDataSet.length;
+            updateFlashcardUI();
+        }
+
+        function prevFlashcard() {
+            playSound('click');
+            flashcardIndex = (flashcardIndex - 1 + activeDataSet.length) % activeDataSet.length;
+            updateFlashcardUI();
+        }
+
+        function renderCompleteList() {
+            const container = document.getElementById('listContainer');
+            container.innerHTML = '';
+
+            activeDataSet.forEach(item => {
+                const row = document.createElement('div');
+                row.className = "p-3 rounded-2xl bg-white border border-cream shadow-flat flex items-center justify-between hover:border-sage transition";
+                row.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <span class="text-2xl">${item.emoji}</span>
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <h4 class="font-bold text-sm text-charcoal">${item.full}</h4>
+                                <span class="text-[10px] px-2 py-0.5 rounded bg-cream font-bold text-clay">${item.cat}</span>
+                            </div>
+                            <p class="text-xs text-muted">Past: <span class="font-semibold text-charcoal">${item.past}</span> | ${item.example}</p>
+                        </div>
+                    </div>
+                    <button onclick="playListAudio('${item.full}')" class="w-8 h-8 rounded-xl bg-cream hover:bg-sage hover:text-white text-muted transition flex items-center justify-center">
+                        <i class="fa-solid fa-volume-high text-xs"></i>
+                    </button>
+                `;
+                container.appendChild(row);
+            });
+        }
+
+        function filterList() {
+            const query = document.getElementById('listSearch').value.toLowerCase();
+            const rows = document.getElementById('listContainer').children;
+            Array.from(rows).forEach(row => {
+                row.style.display = row.innerText.toLowerCase().includes(query) ? 'flex' : 'none';
+            });
+        }
+
+        function playListAudio(text) {
+            if (!('speechSynthesis' in window)) return;
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'en-US';
+            window.speechSynthesis.speak(utterance);
+        }
+
+
+        /* ==========================================================================
+           8. MODE 2: MATCHING GAME LOGIC
+           ========================================================================== */
+        let selectedLeft = null;
+        let selectedRight = null;
+        let matchMatchedCount = 0;
+
+        function initMatchGame() {
+            matchMatchedCount = 0;
+            selectedLeft = null;
+            selectedRight = null;
+            document.getElementById('matchScore').innerText = '0';
+
+            const dataset = activeDataSet.length >= 6 ? activeDataSet : VERB_DATA_100;
+            const shuffled = [...dataset].sort(() => 0.5 - Math.random()).slice(0, 6);
+            
+            const leftItems = shuffled.map(item => ({ id: item.id, text: item.verb, emoji: item.emoji }));
+            const rightItems = shuffled.map(item => ({ id: item.id, text: item.collocation }));
+
+            leftItems.sort(() => 0.5 - Math.random());
+            rightItems.sort(() => 0.5 - Math.random());
+
+            const leftCol = document.getElementById('matchLeftCol');
+            const rightCol = document.getElementById('matchRightCol');
+
+            leftCol.innerHTML = '';
+            rightCol.innerHTML = '';
+
+            leftItems.forEach(item => {
+                const btn = document.createElement('button');
+                btn.className = "match-btn w-full p-2.5 rounded-2xl bg-white border border-cream font-bold text-xs sm:text-sm text-charcoal shadow-flat hover:border-sage transition text-left flex items-center gap-2";
+                btn.dataset.id = item.id;
+                btn.innerHTML = `<span>${item.emoji}</span> <span>${item.text}</span>`;
+                btn.onclick = () => handleMatchSelect(btn, 'left');
+                leftCol.appendChild(btn);
+            });
+
+            rightItems.forEach(item => {
+                const btn = document.createElement('button');
+                btn.className = "match-btn w-full p-2.5 rounded-2xl bg-white border border-cream font-bold text-xs sm:text-sm text-charcoal shadow-flat hover:border-sage transition text-left flex items-center justify-between";
+                btn.dataset.id = item.id;
+                btn.innerText = item.text;
+                btn.onclick = () => handleMatchSelect(btn, 'right');
+                rightCol.appendChild(btn);
+            });
+        }
+
+        function handleMatchSelect(btn, side) {
+            playSound('click');
+
+            if (side === 'left') {
+                if (selectedLeft) selectedLeft.classList.remove('border-clay', 'bg-clayLight');
+                selectedLeft = btn;
+                selectedLeft.classList.add('border-clay', 'bg-clayLight');
+            } else {
+                if (selectedRight) selectedRight.classList.remove('border-clay', 'bg-clayLight');
+                selectedRight = btn;
+                selectedRight.classList.add('border-clay', 'bg-clayLight');
+            }
+
+            if (selectedLeft && selectedRight) {
+                const leftId = selectedLeft.dataset.id;
+                const rightId = selectedRight.dataset.id;
+
+                if (leftId === rightId) {
+                    triggerFireworks();
+                    showToast("Spot on! Match found!", true);
+                    awardStar(parseInt(leftId));
+
+                    selectedLeft.className = "w-full p-2.5 rounded-2xl bg-sage/20 border border-sage font-bold text-xs sm:text-sm text-sage opacity-60 cursor-default flex items-center gap-2";
+                    selectedRight.className = "w-full p-2.5 rounded-2xl bg-sage/20 border border-sage font-bold text-xs sm:text-sm text-sage opacity-60 cursor-default flex items-center justify-between";
+
+                    selectedLeft.onclick = null;
+                    selectedRight.onclick = null;
+
+                    selectedLeft = null;
+                    selectedRight = null;
+                    matchMatchedCount++;
+                    document.getElementById('matchScore').innerText = matchMatchedCount;
+
+                    if (matchMatchedCount === 6) {
+                        setTimeout(() => showToast("Superb! All pairs matched!", true), 500);
+                    }
+                } else {
+                    playSound('error');
+                    selectedLeft.classList.add('animate-shake');
+                    selectedRight.classList.add('animate-shake');
+
+                    setTimeout(() => {
+                        if (selectedLeft) {
+                            selectedLeft.classList.remove('animate-shake', 'border-clay', 'bg-clayLight');
+                            selectedLeft = null;
+                        }
+                        if (selectedRight) {
+                            selectedRight.classList.remove('animate-shake', 'border-clay', 'bg-clayLight');
+                            selectedRight = null;
+                        }
+                    }, 400);
+                }
+            }
+        }
+
+
+        /* ==========================================================================
+           9. MODE 3: TIMED GAPFILL LOGIC
+           ========================================================================== */
+        function loadGapfillQuestion() {
+            if (gapTimerInterval) clearInterval(gapTimerInterval);
+
+            const dataset = activeDataSet.length > 0 ? activeDataSet : VERB_DATA_100;
+            gapCurrentItem = dataset[Math.floor(Math.random() * dataset.length)];
+
+            document.getElementById('gapEmoji').innerText = gapCurrentItem.emoji;
+
+            const maskedSentence = gapCurrentItem.example.replace(
+                new RegExp(gapCurrentItem.verb, 'gi'),
+                '____'
+            );
+            document.getElementById('gapSentence').innerHTML = maskedSentence.replace(
+                '____',
+                `<span class="px-3 py-1 bg-cream rounded-xl text-clay font-bold border-b-2 border-clay">____</span>`
+            );
+
+            const distractors = VERB_DATA_100
+                .filter(i => i.verb !== gapCurrentItem.verb)
+                .sort(() => 0.5 - Math.random())
+                .slice(0, 3)
+                .map(i => i.verb);
+
+            const options = [gapCurrentItem.verb, ...distractors].sort(() => 0.5 - Math.random());
+
+            const optionsContainer = document.getElementById('gapOptions');
+            optionsContainer.innerHTML = '';
+
+            options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = "p-3 rounded-2xl bg-white border border-cream font-bold text-sm text-charcoal shadow-flat hover:border-sage hover:bg-cream/40 transition";
+                btn.innerText = opt;
+                btn.onclick = () => checkGapfillAnswer(opt, btn);
+                optionsContainer.appendChild(btn);
+            });
+
+            gapTimeLeft = 12;
+            updateGapTimerUI();
+            gapTimerInterval = setInterval(() => {
+                gapTimeLeft--;
+                updateGapTimerUI();
+                if (gapTimeLeft <= 0) {
+                    clearInterval(gapTimerInterval);
+                    playSound('error');
+                    showToast("Time's up! Next word incoming...", false);
+                    setTimeout(loadGapfillQuestion, 1500);
+                }
+            }, 1000);
+        }
+
+        function updateGapTimerUI() {
+            document.getElementById('gapTimerText').innerText = `${gapTimeLeft}s`;
+            const pct = (gapTimeLeft / 12) * 100;
+            const timerBar = document.getElementById('gapTimerBar');
+            timerBar.style.width = `${pct}%`;
+            timerBar.className = gapTimeLeft <= 4 ? "bg-red-500 h-full w-full transition-all duration-100 ease-linear" : "bg-clay h-full w-full transition-all duration-100 ease-linear";
+        }
+
+        function checkGapfillAnswer(selected, btn) {
+            if (gapTimerInterval) clearInterval(gapTimerInterval);
+
+            if (selected === gapCurrentItem.verb) {
+                triggerFireworks();
+                btn.className = "p-3 rounded-2xl bg-sage text-white font-bold text-sm shadow-flat animate-pop";
+                showToast("Great job! Defused in time!", true);
+                awardStar(gapCurrentItem.id);
+                setTimeout(loadGapfillQuestion, 1500);
+            } else {
+                playSound('error');
+                btn.classList.add('animate-shake', 'bg-red-100', 'border-red-300');
+                showToast("Not quite! Try another verb.", false);
+                setTimeout(() => btn.classList.remove('animate-shake'), 400);
+            }
+        }
+
+
+        /* ==========================================================================
+           10. MODE 4: WRITE WITH HINTS LOGIC
+           ========================================================================== */
+        function loadWriteQuestion() {
+            const dataset = activeDataSet.length > 0 ? activeDataSet : VERB_DATA_100;
+            writeCurrentItem = dataset[Math.floor(Math.random() * dataset.length)];
+
+            document.getElementById('writeEmoji').innerText = writeCurrentItem.emoji;
+            document.getElementById('writePlaceholder').innerText = '_______';
+            document.getElementById('writeContext').innerHTML = writeCurrentItem.example.replace(
+                new RegExp(writeCurrentItem.verb, 'gi'),
+                `<span class="font-bold text-clay underline">_______</span>`
+            );
+
+            document.getElementById('writeInput').value = '';
+            document.getElementById('writeHintBox').classList.add('hidden');
+            document.getElementById('writeFirstLetter').innerText = writeCurrentItem.verb.charAt(0);
+            document.getElementById('writeWordLen').innerText = writeCurrentItem.verb.length;
+        }
+
+        function revealWriteHint() {
+            playSound('click');
+            document.getElementById('writeHintBox').classList.remove('hidden');
+        }
+
+        function handleWriteSubmit(e) {
+            e.preventDefault();
+            const inputVal = document.getElementById('writeInput').value.trim().toLowerCase();
+            const targetVerb = writeCurrentItem.verb.toLowerCase();
+
+            if (inputVal === targetVerb) {
+                triggerFireworks();
+                showToast("Great job! Correct spelling!", true);
+                awardStar(writeCurrentItem.id);
+                setTimeout(loadWriteQuestion, 1500);
+            } else {
+                playSound('error');
+                const card = document.getElementById('writeCard');
+                card.classList.add('animate-shake');
+                showToast("Check your spelling and try again!", false);
+                setTimeout(() => card.classList.remove('animate-shake'), 400);
+            }
+        }
+
+
+        /* ==========================================================================
+           11. MODE 5: PRODUCTIVE SENTENCE BUILDER LOGIC
+           ========================================================================== */
+        function loadProdScenario() {
+            const scenario = PRODUCTIVE_SCENARIOS[prodCurrentIndex];
+            document.getElementById('prodEmoji').innerText = scenario.emoji;
+            document.getElementById('prodScenarioTitle').innerText = scenario.title;
+            document.getElementById('prodScenarioDesc').innerText = scenario.desc;
+
+            prodSelectedWords = [];
+            renderProdArea();
+        }
+
+        function renderProdArea() {
+            const scenario = PRODUCTIVE_SCENARIOS[prodCurrentIndex];
+            const dropZone = document.getElementById('prodDropZone');
+            const wordBank = document.getElementById('prodWordBank');
+
+            dropZone.innerHTML = '';
+            if (prodSelectedWords.length === 0) {
+                dropZone.innerHTML = `<span class="text-xs text-muted italic">Tap words below to assemble sentence...</span>`;
+            } else {
+                prodSelectedWords.forEach((word, idx) => {
+                    const pill = document.createElement('button');
+                    pill.className = "px-3 py-1.5 rounded-xl bg-white text-charcoal font-bold text-xs shadow-flat border border-cream flex items-center gap-1.5 hover:bg-red-50 hover:text-red-600 transition";
+                    pill.innerHTML = `<span>${word}</span> <i class="fa-solid fa-xmark text-[10px]"></i>`;
+                    pill.onclick = () => removeProdWord(idx);
+                    dropZone.appendChild(pill);
+                });
+            }
+
+            wordBank.innerHTML = '';
+            const availableWords = scenario.options.filter(w => {
+                const countInSelected = prodSelectedWords.filter(sw => sw === w).length;
+                const countInOptions = scenario.options.filter(ow => ow === w).length;
+                return countInSelected < countInOptions;
+            });
+
+            availableWords.forEach(word => {
+                const btn = document.createElement('button');
+                btn.className = "px-3.5 py-2 rounded-xl bg-white text-charcoal font-bold text-xs border border-cream shadow-flat hover:border-sage hover:bg-cream/30 transition";
+                btn.innerText = word;
+                btn.onclick = () => selectProdWord(word);
+                wordBank.appendChild(btn);
+            });
+        }
+
+        function selectProdWord(word) {
+            playSound('click');
+            prodSelectedWords.push(word);
+            renderProdArea();
+        }
+
+        function removeProdWord(idx) {
+            playSound('click');
+            prodSelectedWords.splice(idx, 1);
+            renderProdArea();
+        }
+
+        function clearProdSentence() {
+            playSound('click');
+            prodSelectedWords = [];
+            renderProdArea();
+        }
+
+        function checkProdSentence() {
+            const scenario = PRODUCTIVE_SCENARIOS[prodCurrentIndex];
+            const isCorrect = JSON.stringify(prodSelectedWords) === JSON.stringify(scenario.correct);
+
+            if (isCorrect) {
+                triggerFireworks();
+                showToast("Superb! Natural sentence built!", true);
+                awardStar(100 + prodCurrentIndex);
+                prodCurrentIndex = (prodCurrentIndex + 1) % PRODUCTIVE_SCENARIOS.length;
+                setTimeout(loadProdScenario, 1800);
+            } else {
+                playSound('error');
+                const dropZone = document.getElementById('prodDropZone');
+                dropZone.classList.add('animate-shake');
+                showToast("Not quite natural! Try re-ordering.", false);
+                setTimeout(() => dropZone.classList.remove('animate-shake'), 400);
+            }
+        }
+
+        /* ==========================================================================
+           12. INITIALIZATION ON WINDOW LOAD
+           ========================================================================== */
+        window.onload = function() {
+            applyFilters();
+        };
+    </script>
+</body>
+</html>
